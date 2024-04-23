@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { currentUser } from "@clerk/nextjs";
 
 import { communityTabs } from "@/constants";
 
@@ -8,11 +7,18 @@ import ThreadsTab from "@/components/shared/ThreadsTab";
 import ProfileHeader from "@/components/shared/ProfileHeader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { fetchCommunityDetails } from "@/lib/actions/community.actions";
+import { fetchCommunityDetails } from "@/actions/community.actions";
+import { Session, getServerSession } from "next-auth";
+import { authOptions } from "@/libs/auth";
 
 async function Page({ params }: { params: { id: string } }) {
-  const user = await currentUser();
-  if (!user) return null;
+  const session: Session | null = await getServerSession(authOptions);
+
+  const user = session?.user
+
+  if (!user) {
+    return null; // to avoid typescript warnings
+  }
 
   const communityDetails = await fetchCommunityDetails(params.id);
 
@@ -20,7 +26,7 @@ async function Page({ params }: { params: { id: string } }) {
     <section>
       <ProfileHeader
         accountId={communityDetails.createdBy.id}
-        authUserId={user.id}
+        authUserId={user._id}
         name={communityDetails.name}
         username={communityDetails.username}
         imgUrl={communityDetails.image}
@@ -54,7 +60,7 @@ async function Page({ params }: { params: { id: string } }) {
           <TabsContent value='threads' className='w-full text-light-1'>
             {/* @ts-ignore */}
             <ThreadsTab
-              currentUserId={user.id}
+              currentUserId={user._id}
               accountId={communityDetails._id}
               accountType='Community'
             />
@@ -78,7 +84,7 @@ async function Page({ params }: { params: { id: string } }) {
           <TabsContent value='requests' className='w-full text-light-1'>
             {/* @ts-ignore */}
             <ThreadsTab
-              currentUserId={user.id}
+              currentUserId={user._id}
               accountId={communityDetails._id}
               accountType='Community'
             />

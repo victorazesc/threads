@@ -1,15 +1,21 @@
 import Image from "next/image";
 import Link from "next/link";
-import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
-import { fetchUser, getActivity } from "@/lib/actions/user.actions";
+import { fetchUser, getActivity } from "@/actions/user.actions";
+import { Session, getServerSession } from "next-auth";
+import { authOptions } from "@/libs/auth";
 
 async function Page() {
-  const user = await currentUser();
-  if (!user) return null;
+  const session: Session | null = await getServerSession(authOptions);
 
-  const userInfo = await fetchUser(user.id);
+  const user = session?.user
+
+  if (!user) {
+    return null; // to avoid typescript warnings
+  }
+
+  const userInfo = await fetchUser(user._id);
   if (!userInfo?.onboarded) redirect("/onboarding");
 
   const activity = await getActivity(userInfo._id);

@@ -24,7 +24,11 @@ const nextConfig = {
             },
             {
                 protocol: "https",
-                hostname: "images.clerk.dev",
+                hostname: "lh3.googleusercontent.com",
+            },
+            {
+                protocol: "https",
+                hostname: "utfs.io",
             },
             {
                 protocol: "https",

@@ -1,25 +1,33 @@
-import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
-import { fetchUser } from "@/lib/actions/user.actions";
+import { fetchUser } from "@/actions/user.actions";
 import AccountProfile from "@/components/forms/AccountProfile";
+import { authOptions } from "@/libs/auth";
+import { Session, getServerSession } from "next-auth";
+import Email from "next-auth/providers/email";
 
 // Copy paste most of the code as it is from the /onboarding
 
 async function Page() {
-  const user = await currentUser();
-  if (!user) return null;
+  const session: Session | null = await getServerSession(authOptions);
+
+  const user = session?.user
+
+  if (!user) {
+    return null; // to avoid typescript warnings
+  }
 
   const userInfo = await fetchUser(user.id);
   if (!userInfo?.onboarded) redirect("/onboarding");
 
   const userData = {
     id: user.id,
-    objectId: userInfo?._id,
+    email: user.email,
+    objectId: userInfo?.id,
     username: userInfo ? userInfo?.username : user.username,
-    name: userInfo ? userInfo?.name : user.firstName ?? "",
+    name: userInfo ? userInfo?.name : user.name.split('')[0] ?? "",
     bio: userInfo ? userInfo?.bio : "",
-    image: userInfo ? userInfo?.image : user.imageUrl,
+    image: userInfo ? userInfo?.image : user.image,
   };
 
   return (

@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @layer components {
+
   /* main */
   .main-container {
     @apply flex min-h-screen flex-1 flex-col items-center bg-dark-1 px-6 pb-10 pt-28 max-md:pb-32 sm:px-10;
@@ -116,14 +117,62 @@
   }
 }
 
+@layer base {
+  :root {
+    --barcelona-primary-background: rgb(16, 16, 16);
+    --barcelona-secondary-background: rgb(10, 10, 10);
+    --barcelona-tertiary-background: rgb(30, 30, 30);
+    --barcelona-primary-icon: rgb(243, 245, 247);
+    /* Font Sizes */
+    --system-10-font-size: 10px;
+    --system-11-font-size: 11px;
+    --system-12-font-size: 12px;
+    --system-13-font-size: 13px;
+    --system-14-font-size: 14px;
+    --system-15-font-size: 15px;
+    --system-16-font-size: 16px;
+    --system-18-font-size: 18px;
+    --system-20-font-size: 20px;
+    --system-22-font-size: 22px;
+    --system-24-font-size: 24px;
+    --system-26-font-size: 26px;
+    --system-28-font-size: 28px;
+    --system-30-font-size: 30px;
+    --system-32-font-size: 32px;
+
+    /* Line Height */
+    --system-10-line-height: 12px;
+    --system-11-line-height: 13px;
+    --system-12-line-height: 16px;
+    --system-14-line-height: 18px;
+    --system-15-line-height: 21px;
+    --system-16-line-height: 20px;
+    --system-18-line-height: 24px;
+    --system-20-line-height: 25px;
+    --system-22-line-height: 26px;
+    --system-24-line-height: 27px;
+    --system-26-line-height: 28px;
+    --system-28-line-height: 32px;
+    --system-30-line-height: 36px;
+    --system-32-line-height: 40px;
+
+    --base-line-clamp-line-height: calc(1.3125* 1em);
+
+    /* Text color */
+    --barcelona-primary-text: rgb(243, 245, 247);
+    --barcelona-secondary-text: rgb(119, 119, 119);
+
+
+    --barcelona-primary-outline: rgba(243, 245, 247, 0.15);
+  }
+}
+
 /* Clerk Responsive fix */
 .cl-organizationSwitcherTrigger .cl-userPreview .cl-userPreviewTextContainer {
   @apply max-sm:hidden;
 }
 
-.cl-organizationSwitcherTrigger
-  .cl-organizationPreview
-  .cl-organizationPreviewTextContainer {
+.cl-organizationSwitcherTrigger .cl-organizationPreview .cl-organizationPreviewTextContainer {
   @apply max-sm:hidden;
 }
 
@@ -140,7 +189,7 @@
 
 /* Account Profile  */
 .account-form_image-label {
-  @apply flex h-24 w-24 items-center justify-center rounded-full bg-dark-4 !important;
+  @apply flex h-14 w-14 items-center justify-center rounded-full bg-dark-4 !important;
 }
 
 .account-form_image-input {

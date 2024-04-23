@@ -1,25 +1,31 @@
 import { redirect } from "next/navigation";
-import { currentUser } from "@clerk/nextjs";
 
 import UserCard from "@/components/cards/UserCard";
 import Searchbar from "@/components/shared/SearchBar";
 import Pagination from "@/components/shared/Pagination";
 
-import { fetchUser, fetchUsers } from "@/lib/actions/user.actions";
+import { fetchUser, fetchUsers } from "@/actions/user.actions";
+import { authOptions } from "@/libs/auth";
+import { Session, getServerSession } from "next-auth";
 
 async function Page({
   searchParams,
 }: {
   searchParams: { [key: string]: string | undefined };
 }) {
-  const user = await currentUser();
-  if (!user) return null;
+  const session: Session | null = await getServerSession(authOptions);
 
-  const userInfo = await fetchUser(user.id);
+  const user = session?.user
+
+  if (!user) {
+    return null; // to avoid typescript warnings
+  }
+
+  const userInfo = await fetchUser(user._id);
   if (!userInfo?.onboarded) redirect("/onboarding");
 
   const result = await fetchUsers({
-    userId: user.id,
+    userId: user._id,
     searchString: searchParams.q,
     pageNumber: searchParams?.page ? +searchParams.page : 1,
     pageSize: 25,

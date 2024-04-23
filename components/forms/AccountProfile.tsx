@@ -2,11 +2,11 @@
 
 import * as z from "zod";
 import Image from "next/image";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { usePathname, useRouter } from "next/navigation";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { useDropzone } from "react-dropzone";
 import {
   Form,
   FormControl,
@@ -19,11 +19,16 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
-import { useUploadThing } from "@/lib/uploadthing";
-import { isBase64Image } from "@/lib/utils";
+import { useUploadThing } from "@/libs/uploadthing";
+import { isBase64Image } from "@/libs/utils";
 
-import { UserValidation } from "@/lib/validations/user";
-import { updateUser } from "@/lib/actions/user.actions";
+import { UserValidation } from "@/libs/validations/user";
+import { updateUser } from "@/actions/user.actions";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { Label } from "../ui/label";
+import { MAX_FILE_SIZE } from "@/constants/common";
+import { UserCircle2, UserPlus2 } from "lucide-react";
+import { SessionContextValue, useSession } from "next-auth/react";
 
 interface Props {
   user: {
@@ -31,6 +36,7 @@ interface Props {
     objectId: string;
     username: string;
     name: string;
+    email: string;
     bio: string;
     image: string;
   };
@@ -38,42 +44,82 @@ interface Props {
 }
 
 const AccountProfile = ({ user, btnTitle }: Props) => {
+  const [image, setImage] = useState<File[] | null>(null);
+  const onDrop = (acceptedFiles: File[]) => setImage(acceptedFiles);
+  const { getRootProps, getInputProps, isDragActive, fileRejections } = useDropzone({
+    onDrop,
+    accept: {
+      "image/*": [".png", ".jpg", ".jpeg", ".svg", ".webp"],
+    },
+    maxSize: MAX_FILE_SIZE,
+    multiple: false,
+  });
   const router = useRouter();
   const pathname = usePathname();
-  const { startUpload } = useUploadThing("media");
+  const { status, data, update } = useSession() as SessionContextValue
+  const { startUpload } = useUploadThing("imageUploader")
 
-  const [files, setFiles] = useState<File[]>([]);
-
-  const form = useForm<z.infer<typeof UserValidation>>({
+  const {
+    handleSubmit,
+    control,
+    getValues,
+    setValue,
+    watch,
+    formState: { errors, isSubmitting, isValid },
+  } = useForm<z.infer<typeof UserValidation>>({
     resolver: zodResolver(UserValidation),
     defaultValues: {
-      profile_photo: user?.image ? user.image : "",
       name: user?.name ? user.name : "",
       username: user?.username ? user.username : "",
       bio: user?.bio ? user.bio : "",
+      image: user?.image ? user.image : "",
     },
+    mode: "onChange",
   });
 
+
   const onSubmit = async (values: z.infer<typeof UserValidation>) => {
-    const blob = values.profile_photo;
+    if (image) {
+      const imgRes = await startUpload(image);
+      if (imgRes) {
+        await update({
+          ...user,
+          image: imgRes[0].url
+        });
+        await updateUser({
+          name: values.name,
+          path: pathname,
+          email: user.email,
+          username: values.username,
+          userId: user.id,
+          bio: values.bio,
+          image: imgRes[0].url
+        });
 
-    const hasImageChanged = isBase64Image(blob);
-    if (hasImageChanged) {
-      const imgRes = await startUpload(files);
-
-      if (imgRes && imgRes[0].fileUrl) {
-        values.profile_photo = imgRes[0].fileUrl;
+        setImage(null);
       }
-    }
+    } else {
+      console.log('asdqui')
+      await update({
+        ...user,
+        user: {
+          ...user,
+          image: null
+        },
+      });
 
-    await updateUser({
-      name: values.name,
-      path: pathname,
-      username: values.username,
-      userId: user.id,
-      bio: values.bio,
-      image: values.profile_photo,
-    });
+
+      await updateUser({
+        name: values.name,
+        path: pathname,
+        email: user.email,
+        username: values.username,
+        userId: user.id,
+        bio: values.bio,
+        image: values.image ?? ''
+      });
+
+    }
 
     if (pathname === "/profile/edit") {
       router.back();
@@ -82,138 +128,138 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
     }
   };
 
-  const handleImage = (
-    e: ChangeEvent<HTMLInputElement>,
-    fieldChange: (value: string) => void
-  ) => {
-    e.preventDefault();
-
-    const fileReader = new FileReader();
-
-    if (e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0];
-      setFiles(Array.from(e.target.files));
-
-      if (!file.type.includes("image")) return;
-
-      fileReader.onload = async (event) => {
-        const imageDataUrl = event.target?.result?.toString() || "";
-        fieldChange(imageDataUrl);
-      };
-
-      fileReader.readAsDataURL(file);
-    }
+  const handleRemove = () => {
+    setImage(null)
+    setValue("image", "")
   };
 
   return (
-    <Form {...form}>
-      <form
-        className='flex flex-col justify-start gap-10'
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
-        <FormField
-          control={form.control}
-          name='profile_photo'
-          render={({ field }) => (
-            <FormItem className='flex items-center gap-4'>
-              <FormLabel className='account-form_image-label'>
-                {field.value ? (
-                  <Image
-                    src={field.value}
-                    alt='profile_icon'
-                    width={96}
-                    height={96}
-                    priority
-                    className='rounded-full object-contain'
-                  />
-                ) : (
-                  <Image
-                    src='/assets/profile.svg'
-                    alt='profile_icon'
-                    width={24}
-                    height={24}
-                    className='object-contain'
-                  />
-                )}
-              </FormLabel>
-              <FormControl className='flex-1 text-base-semibold text-gray-200'>
-                <Input
-                  type='file'
-                  accept='image/*'
-                  placeholder='Add profile photo'
-                  className='account-form_image-input'
-                  onChange={(e) => handleImage(e, field.onChange)}
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
+    <form
+      className='flex flex-col justify-start gap-10'
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      {JSON.stringify(errors)}
 
-        <FormField
-          control={form.control}
+
+      <div className="flex text-primary gap-2 w-full">
+        <Controller
+          control={control}
           name='name'
           render={({ field }) => (
-            <FormItem className='flex w-full flex-col gap-3'>
-              <FormLabel className='text-base-semibold text-light-2'>
+            <div className="flex flex-col gap-2 w-full">
+              <Label className="text-15">
                 Name
-              </FormLabel>
-              <FormControl>
-                <Input
-                  type='text'
-                  className='account-form_input no-focus'
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+              </Label>
+
+              <Input
+                type='text'
+                className='account-form_input no-focus '
+                {...field}
+              />
+            </div>
           )}
         />
 
-        <FormField
-          control={form.control}
-          name='username'
-          render={({ field }) => (
-            <FormItem className='flex w-full flex-col gap-3'>
-              <FormLabel className='text-base-semibold text-light-2'>
-                Username
-              </FormLabel>
-              <FormControl>
-                <Input
-                  type='text'
-                  className='account-form_input no-focus'
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+
+        <Controller
+          control={control}
+          name="image"
+          render={({ field: { onChange, value } }) => (
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <div
+                  {...getRootProps()}
+                  className={`relative grid overflow-hidden account-form_image-label cursor-pointer place-items-center rounded-lg flex-none p-2 text-center focus:outline-none self-end ${(image === null && isDragActive) || !value
+                    ? "hover:bg-custom-background-90"
+                    : ""
+                    }`}
+                >
+                  {image !== null || (value && value !== "") ? (
+                    <>
+
+                      <Image
+                        fill
+                        objectFit="cover"
+                        src={image ? URL.createObjectURL(image[0]) : value ? value : ""}
+                        alt="image"
+                        className="absolute left-0 top-0 h-full w-full rounded-md object-cover"
+                      />
+                    </>
+                  ) : (
+                    <UserPlus2 className="mx-auto h-6 w-6 text-custom-text-200" />
+                  )}
+                  <input {...getInputProps()} type="text" />
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <div
+                      {...getRootProps()}
+                    >
+                      Carregar foto
+                      <input {...getInputProps()} type="text" />
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    Importar do Instagram
+                  </DropdownMenuItem>
+                  {(image !== null || (value && value !== "")) &&
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={handleRemove} className="text-red-600">
+                        Remover Imagem
+                      </DropdownMenuItem>
+                    </>
+                  }
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
           )}
         />
+      </div>
 
-        <FormField
-          control={form.control}
-          name='bio'
-          render={({ field }) => (
-            <FormItem className='flex w-full flex-col gap-3'>
-              <FormLabel className='text-base-semibold text-light-2'>
-                Bio
-              </FormLabel>
-              <FormControl>
-                <Textarea
-                  rows={10}
-                  className='account-form_input no-focus'
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <Controller
+        control={control}
+        name='username'
+        render={({ field }) => (
+          <div className="flex flex-col gap-2 text-primary w-full">
+            <Label className="text-15">
+              Username
+            </Label>
 
-        <Button type='submit' className='bg-primary-500'>
-          {btnTitle}
-        </Button>
-      </form>
-    </Form>
+            <Input
+              type='text'
+              className='account-form_input no-focus'
+              {...field}
+            />
+          </div>
+        )}
+      />
+
+      <Controller
+        control={control}
+        name='bio'
+        render={({ field }) => (
+          <div className="flex flex-col gap-2 text-primary w-full">
+            <Label className="text-15">
+              Bio
+            </Label>
+
+            <Textarea
+              rows={5}
+              className='account-form_input no-focus'
+              {...field}
+            />
+          </div>
+        )}
+      />
+
+      <Button type="submit" className='bg-primary h-[52px] text-black'>
+        {btnTitle}
+      </Button>
+    </form >
   );
 };
 

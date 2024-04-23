@@ -6,12 +6,14 @@ import { revalidatePath } from "next/cache";
 import Community from "../models/community.model";
 import Thread from "../models/thread.model";
 import User from "../models/user.model";
-
-import { connectToDB } from "../mongoose";
+import { ObjectId } from 'mongodb';
+import { connectDB } from "../libs/mongodb";
+import { NextRequest } from "next/server";
+import { getToken } from "next-auth/jwt";
 
 export async function fetchUser(userId: string) {
   try {
-    connectToDB();
+    connectDB();
 
     return await User.findOne({ id: userId }).populate({
       path: "communities",
@@ -29,6 +31,7 @@ interface Params {
   bio: string;
   image: string;
   path: string;
+  email: string
 }
 
 export async function updateUser({
@@ -36,17 +39,25 @@ export async function updateUser({
   bio,
   name,
   path,
+  email,
   username,
   image,
 }: Params): Promise<void> {
   try {
-    connectToDB();
-
+    connectDB();
+    console.log(userId,
+      bio,
+      name,
+      path,
+      email,
+      username,
+      image,)
     await User.findOneAndUpdate(
-      { id: userId },
+      { _id: userId },
       {
         username: username.toLowerCase(),
         name,
+        email,
         bio,
         image,
         onboarded: true,
@@ -64,7 +75,7 @@ export async function updateUser({
 
 export async function fetchUserPosts(userId: string) {
   try {
-    connectToDB();
+    connectDB();
 
     // Find all threads authored by the user with the given userId
     const threads = await User.findOne({ id: userId }).populate({
@@ -109,7 +120,7 @@ export async function fetchUsers({
   sortBy?: SortOrder;
 }) {
   try {
-    connectToDB();
+    connectDB();
 
     // Calculate the number of users to skip based on the page number and page size.
     const skipAmount = (pageNumber - 1) * pageSize;
@@ -155,7 +166,7 @@ export async function fetchUsers({
 
 export async function getActivity(userId: string) {
   try {
-    connectToDB();
+    connectDB();
 
     // Find all threads created by the user
     const userThreads = await Thread.find({ author: userId });
@@ -179,5 +190,17 @@ export async function getActivity(userId: string) {
   } catch (error) {
     console.error("Error fetching replies: ", error);
     throw error;
+  }
+}
+
+export async function getMe(req: NextRequest) {
+  try {
+    const session = await getToken({ req })
+    if (!session) throw new Error('Usuario não autenticado.')
+
+    return session
+
+  } catch (error: any) {
+    throw new Error(error)
   }
 }

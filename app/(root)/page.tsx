@@ -1,21 +1,27 @@
-import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
 import ThreadCard from "@/components/cards/ThreadCard";
 import Pagination from "@/components/shared/Pagination";
 
-import { fetchPosts } from "@/lib/actions/thread.actions";
-import { fetchUser } from "@/lib/actions/user.actions";
+import { fetchPosts } from "@/actions/thread.actions";
+import { fetchUser } from "@/actions/user.actions";
+import { authOptions } from "@/libs/auth";
+import { Session, getServerSession } from "next-auth";
 
 async function Home({
   searchParams,
 }: {
   searchParams: { [key: string]: string | undefined };
 }) {
-  const user = await currentUser();
-  if (!user) return null;
+  const session: Session | null = await getServerSession(authOptions);
 
-  const userInfo = await fetchUser(user.id);
+  const user = session?.user
+
+  if (!user) {
+    return null; // to avoid typescript warnings
+  }
+
+  const userInfo = await fetchUser(user._id);
   if (!userInfo?.onboarded) redirect("/onboarding");
 
   const result = await fetchPosts(
@@ -36,7 +42,7 @@ async function Home({
               <ThreadCard
                 key={post._id}
                 id={post._id}
-                currentUserId={user.id}
+                currentUserId={user._id}
                 parentId={post.parentId}
                 content={post.text}
                 author={post.author}

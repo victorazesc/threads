@@ -173,6 +173,9 @@ module.exports = {
     },
     extend: {
       colors: {
+        "primary-outline": "var(--barcelona-primary-outline)",
+        "primary": "var(--barcelona-primary-text)",
+        "secondary": "var(--barcelona-secondary-text)",
         "primary-500": "#877EFF",
         "secondary-500": "#FFB620",
         blue: "#0095F6",
@@ -188,6 +191,13 @@ module.exports = {
         "light-4": "#5C5C7B",
         "gray-1": "#697C89",
         glassmorphism: "rgba(16, 16, 18, 0.60)",
+        custom: {
+          backgrounds: {
+            "primary": "var(--barcelona-primary-background)",
+            "tertiary": "var(--barcelona-tertiary-background)",
+            "secondary": "var(--barcelona-secondary-background)",
+          }
+        }
       },
       boxShadow: {
         "count-badge": "0px 0px 6px 2px rgba(219, 188, 159, 0.30)",
@@ -210,6 +220,41 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      fontSize: {
+        10: "var(--system-10-font-size)",
+        11: "var(--system-11-font-size)",
+        12: "var(--system-12-font-size)",
+        13: "var(--system-13-font-size)",
+        14: "var(--system-14-font-size)",
+        15: "var(--system-15-font-size)",
+        16: "var(--system-16-font-size)",
+        18: "var(--system-18-font-size)",
+        20: "var(--system-20-font-size)",
+        22: "var(--system-22-font-size)",
+        24: "var(--system-24-font-size)",
+        26: "var(--system-26-font-size)",
+        28: "var(--system-28-font-size)",
+        30: "var(--system-30-font-size)",
+        32: "var(--system-32-font-size)",
+
+      },
+      lineHeight: {
+        10: "var(--system-10-line-height)",
+        11: "var(--system-11-line-height)",
+        12: "var(--system-12-line-height)",
+        14: "var(--system-14-line-height)",
+        15: "var(--system-15-line-height)",
+        16: "var(--system-16-line-height)",
+        18: "var(--system-18-line-height)",
+        20: "var(--system-20-line-height)",
+        22: "var(--system-22-line-height)",
+        24: "var(--system-24-line-height)",
+        26: "var(--system-26-line-height)",
+        28: "var(--system-28-line-height)",
+        30: "var(--system-30-line-height)",
+        32: "var(--system-32-line-height)",
+        "base-line": "var(--base-line-clamp-line-height)"
+      }
     },
   },
   plugins: [require("tailwindcss-animate")],

@@ -1,13 +1,19 @@
 import PostThread from "@/components/forms/PostThread"
-import { fetchUser } from "@/lib/actions/user.actions"
-import { currentUser } from "@clerk/nextjs"
+import { fetchUser } from "@/actions/user.actions"
 import { redirect } from "next/navigation"
+import { Session, getServerSession } from "next-auth";
+import { authOptions } from "@/libs/auth";
 
 export default async function Page() {
-    const user = await currentUser()
-    if (!user) return null
+    const session: Session | null = await getServerSession(authOptions);
 
-    const userInfo = await fetchUser(user.id)
+    const user = session?.user
+  
+    if (!user) {
+      return null; // to avoid typescript warnings
+    }
+
+    const userInfo = await fetchUser(user._id)
 
     if (!userInfo?.onboarded) redirect('/onboarding')
     return (
