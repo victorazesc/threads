@@ -15,17 +15,14 @@ async function Page() {
     return null; // to avoid typescript warnings
   }
 
-
-
-
-  const userInfo = await fetchUser(user.id);
+  const userInfo = await fetchUser(user.email);
   if (userInfo?.onboarded) redirect("/");
 
   const userData = {
     id: user.id,
     objectId: userInfo?.id,
     username: userInfo ? userInfo?.username : user.username,
-    name: userInfo ? userInfo?.name : userInfo?.name.split(' ')[0] ?? "",
+    name: userInfo ? userInfo?.name : "",
     bio: userInfo ? userInfo?.bio : "",
     email: user.email,
     image: userInfo ? userInfo?.image : user.image,

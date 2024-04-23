@@ -91,7 +91,6 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
           path: pathname,
           email: user.email,
           username: values.username,
-          userId: user.id,
           bio: values.bio,
           image: imgRes[0].url
         });
@@ -99,7 +98,6 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
         setImage(null);
       }
     } else {
-      console.log('asdqui')
       await update({
         ...user,
         user: {
@@ -114,7 +112,6 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
         path: pathname,
         email: user.email,
         username: values.username,
-        userId: user.id,
         bio: values.bio,
         image: values.image ?? ''
       });

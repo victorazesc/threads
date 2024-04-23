@@ -5,6 +5,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcryptjs";
 import User from "@/models/user.model";
+import { validateGoogleSign } from "@/actions/user.actions";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -46,23 +47,20 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   callbacks: {
-    async jwt({ token, user, session, trigger }) {
-      if (trigger === "update" && session?.name) {
-        token.name = session.name;
-      }
-
-      if (trigger === "update" && session?.email) {
-        token.email = session.email;
+    async jwt({ token, user, trigger, session, profile, account }: any) {
+      if (profile && account?.provider === 'google') {
+          user = await validateGoogleSign({ profile })
       }
 
       if (trigger === "update") {
-        return { ...token, ...session };
+          return { ...token, ...session.user };
       }
       return { ...token, ...user };
-    },
+  },
     async session({ session, token }) {
       session.user = token as any;
+      // console.log(session.user, 'vei oda sessao')
       return session;
-  },
+    },
   },
 };

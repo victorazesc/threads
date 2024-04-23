@@ -22,7 +22,7 @@ async function Page({
     return null; // to avoid typescript warnings
   }
 
-  const userInfo = await fetchUser(user._id);
+  const userInfo = await fetchUser(user.email);
   if (!userInfo?.onboarded) redirect("/onboarding");
 
   const result = await fetchCommunities({

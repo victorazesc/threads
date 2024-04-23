@@ -21,7 +21,7 @@ async function page({ params }: { params: { id: string } }) {
     return null; // to avoid typescript warnings
   }
 
-  const userInfo = await fetchUser(user._id);
+  const userInfo = await fetchUser(user.email);
   if (!userInfo?.onboarded) redirect("/onboarding");
 
   const thread = await fetchThreadById(params.id);
@@ -44,7 +44,7 @@ async function page({ params }: { params: { id: string } }) {
       <div className='mt-7'>
         <Comment
           threadId={params.id}
-          currentUserImg={user.image}
+          currentUserImg={userInfo.image}
           currentUserId={JSON.stringify(userInfo._id)}
         />
       </div>

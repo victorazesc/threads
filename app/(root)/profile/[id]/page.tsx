@@ -7,7 +7,7 @@ import ThreadsTab from "@/components/shared/ThreadsTab";
 import ProfileHeader from "@/components/shared/ProfileHeader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { fetchUser } from "@/actions/user.actions";
+import { fetchUser, fetchUserById } from "@/actions/user.actions";
 import { Session, getServerSession } from "next-auth";
 import { authOptions } from "@/libs/auth";
 
@@ -20,14 +20,14 @@ async function Page({ params }: { params: { id: string } }) {
       return null; // to avoid typescript warnings
     }
 
-    const userInfo = await fetchUser(params.id);
+    const userInfo = await fetchUserById(params.id);
     if (!userInfo?.onboarded) redirect("/onboarding");
 
     return (
         <section>
             <ProfileHeader
                 accountId={userInfo.id}
-                authUserId={user.id}
+                authUserId={user._id}
                 name={userInfo.name}
                 username={userInfo.username}
                 imgUrl={userInfo.image}
@@ -62,10 +62,11 @@ async function Page({ params }: { params: { id: string } }) {
                             value={tab.value}
                             className='w-full text-light-1'
                         >
+                            <h1>asda</h1>
                             {/* @ts-ignore */}
                             <ThreadsTab
-                                currentUserId={user.id}
-                                accountId={userInfo.id}
+                                currentUserId={user._id}
+                                accountId={userInfo._id}
                                 accountType='User'
                             />
                         </TabsContent>

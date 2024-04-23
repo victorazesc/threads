@@ -10,22 +10,36 @@ import { ObjectId } from 'mongodb';
 import { connectDB } from "../libs/mongodb";
 import { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
+import { GoogleProfile } from "next-auth/providers/google";
+import { UserDocument } from "@/types/types";
+import { signJwtAccessToken } from "@/libs/jwt";
 
-export async function fetchUser(userId: string) {
+export async function fetchUser(email: string) {
   try {
     connectDB();
-
-    return await User.findOne({ id: userId }).populate({
+    return await User.findOne({ email }).populate({
       path: "communities",
       model: Community,
     });
+
+  } catch (error: any) {
+    throw new Error(`Failed to fetch user: ${error.message}`);
+  }
+}
+export async function fetchUserById(_id: string) {
+  try {
+    connectDB();
+    return await User.findOne({ _id }).populate({
+      path: "communities",
+      model: Community,
+    });
+
   } catch (error: any) {
     throw new Error(`Failed to fetch user: ${error.message}`);
   }
 }
 
 interface Params {
-  userId: string;
   username: string;
   name: string;
   bio: string;
@@ -34,8 +48,7 @@ interface Params {
   email: string
 }
 
-export async function updateUser({
-  userId,
+export async function createUser({
   bio,
   name,
   path,
@@ -45,15 +58,32 @@ export async function updateUser({
 }: Params): Promise<void> {
   try {
     connectDB();
-    console.log(userId,
-      bio,
-      name,
-      path,
-      email,
-      username,
-      image,)
+    return await User.create(
+      {
+        username: username.toLowerCase(),
+        name,
+        email,
+        bio,
+        image,
+        onboarded: false,
+      }
+    );
+  } catch (error: any) {
+    throw new Error(`Failed to create/update user: ${error.message}`);
+  }
+}
+export async function updateUser({
+  bio,
+  name,
+  path,
+  email,
+  username,
+  image,
+}: Params): Promise<void> {
+  try {
+    connectDB();
     await User.findOneAndUpdate(
-      { _id: userId },
+      { email },
       {
         username: username.toLowerCase(),
         name,
@@ -78,7 +108,7 @@ export async function fetchUserPosts(userId: string) {
     connectDB();
 
     // Find all threads authored by the user with the given userId
-    const threads = await User.findOne({ id: userId }).populate({
+    const threads = await User.findOne({ _id: userId }).populate({
       path: "threads",
       model: Thread,
       populate: [
@@ -203,4 +233,31 @@ export async function getMe(req: NextRequest) {
   } catch (error: any) {
     throw new Error(error)
   }
+}
+
+export async function validateGoogleSign({ profile }: { profile: GoogleProfile }) {
+  let user = await fetchUser(profile.email)
+  console.log(user, 'ewasdasd')
+  if (!user) {
+    const createUserPayload = {
+      image: profile.picture,
+      email: profile.email,
+      name: profile.name,
+      username: profile.email.split("@")[0],
+      path: "/login",
+      bio: "",
+      onboarded: false
+    }
+    user = await createUser(createUserPayload)
+  }
+
+  const { password, ...userWithoutPass } = user._doc;
+  const accessToken = signJwtAccessToken(userWithoutPass);
+  const result = {
+    ...userWithoutPass,
+    accessToken,
+  };
+
+  return result;
+
 }
