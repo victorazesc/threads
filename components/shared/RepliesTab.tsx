@@ -1,37 +1,30 @@
 import { redirect } from "next/navigation";
-
 import { fetchCommunityPosts } from "@/actions/community.actions";
-import { fetchUserPosts, fetchUserReplies } from "@/actions/user.actions";
-
-import ThreadCard from "../cards/ThreadCard";
-import { fetchPosts } from "@/actions/thread.actions";
+import { fetchReplies } from "@/actions/thread.actions";
+import ReplyCard from "../cards/ReplyCard";
 
 interface Result {
-  name: string;
-  image: string;
-  id: string;
-  threads: {
-    _id: string;
-    text: string;
-    parentId: string | null;
+  _id: string;
+  text: string;
+  parentId: string | null;
+  author: {
+    name: string;
+    image: string;
+    id: string;
+  };
+  community: {
+    id: string;
+    name: string;
+    image: string;
+  } | null;
+  createdAt: string;
+  children: {
     author: {
-      name: string;
       image: string;
-      id: string;
     };
-    community: {
-      id: string;
-      name: string;
-      image: string;
-    } | null;
-    createdAt: string;
-    children: {
-      author: {
-        image: string;
-      };
-    }[];
   }[];
-}
+}[];
+
 
 interface Props {
   currentUserId: string;
@@ -40,13 +33,12 @@ interface Props {
 }
 
 async function RepliesTab({ currentUserId, accountId, accountType }: Props) {
-  let result: Result;
+  let result: any;
 
   if (accountType === "Community") {
     result = await fetchCommunityPosts(accountId);
   } else {
-    result = await fetchPosts(accountId);
-    console.log(result)
+    result = await fetchReplies(currentUserId);
   }
 
   if (!result) {
@@ -55,11 +47,9 @@ async function RepliesTab({ currentUserId, accountId, accountType }: Props) {
 
   return (
     <section className='mt-9 flex flex-col gap-10'>
-      <pre>
-        {JSON.stringify(result)}
-      </pre>
-      {result.posts.map((thread) => (
-        <ThreadCard
+
+      {result.posts.map((thread: { _id: string; parentId: string | null; text: string; author: { username: any; name: any; image: any; id: any; }; community: { id: string; name: string; image: string; } | null; createdAt: string; children: { text: string, author: { image: string; name: string; }; }[]; }) => (
+        <ReplyCard
           key={thread._id}
           id={thread._id}
           currentUserId={currentUserId}
@@ -67,6 +57,7 @@ async function RepliesTab({ currentUserId, accountId, accountType }: Props) {
           content={thread.text}
           author={
             {
+              username: thread.author.username,
               name: thread.author.name,
               image: thread.author.image,
               id: thread.author.id,

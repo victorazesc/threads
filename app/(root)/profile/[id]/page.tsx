@@ -67,7 +67,7 @@ async function Page({ params }: { params: { id: string } }) {
                             {/* @ts-ignore */}
                             {tab.content &&
                                 <tab.content
-                                    currentUserId={user._id}
+                                    currentUserId={params.id}
                                     accountId={userInfo._id}
                                     accountType='User'
                                 />

@@ -20,6 +20,7 @@ export const config = {
         "/profile",
         "/search",
         "/thread",
-        "/onboarding"
+        "/onboarding",
+        "/profile/:path*"
     ]
 }

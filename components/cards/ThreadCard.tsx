@@ -11,6 +11,7 @@ interface Props {
   parentId: string | null;
   content: string;
   author: {
+    username: string;
     name: string;
     image: string;
     id: string;
@@ -67,7 +68,7 @@ function ThreadCard({
           <div className='flex w-full flex-col'>
             <Link href={`/profile/${author.id}`} className='w-fit'>
               <h4 className='cursor-pointer text-base-semibold text-light-1'>
-                {author.name}
+                {author.username}
               </h4>
             </Link>
 
@@ -131,8 +132,8 @@ function ThreadCard({
         <div className='ml-1 mt-3 flex items-center gap-2 relative'>
           {comments.slice(0, 2).map((comment, index) => (
             <Avatar
-              name={comment.author.name?.length > 0 ? comment.author.name : "Threads"}
-              src={comment.author.image}
+              name={comment?.author?.name?.length > 0 ? comment?.author?.name : "Threads"}
+              src={comment?.author?.image}
               size={24}
               showTooltip={false}
               shape="circle"

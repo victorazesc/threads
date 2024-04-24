@@ -37,6 +37,9 @@
   .thread-card_bar {
     @apply relative mt-2 w-0.5 grow rounded-full bg-neutral-800;
   }
+  .thread-reply_bar {
+    @apply relative mt-2 w-0.5 -mb-6 grow rounded-full bg-neutral-800;
+  }
 
   /* User card */
   .user-card {
