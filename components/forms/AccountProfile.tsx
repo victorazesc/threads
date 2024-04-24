@@ -135,9 +135,6 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
       className='flex flex-col justify-start gap-10'
       onSubmit={handleSubmit(onSubmit)}
     >
-      {JSON.stringify(errors)}
-
-
       <div className="flex text-primary gap-2 w-full">
         <Controller
           control={control}

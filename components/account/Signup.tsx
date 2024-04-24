@@ -21,8 +21,9 @@ const Signup = () => {
         event.preventDefault();
         try {
             const formData = new FormData(event.currentTarget);
-            const signupResponse = await axios.post(`${process.env.NEXT_PUBLIC_APP_URL}/api/auth/signup`, {
+            const signupResponse = await axios.post(`/api/auth/signup`, {
                 email: formData.get("email"),
+                username: formData.get("username"),
                 password: formData.get("password"),
                 name: formData.get("name"),
                 phone: formData.get("phone"),
@@ -80,6 +81,13 @@ const Signup = () => {
                     placeholder="Email"
                     className="w-full h-8 text-[#A1A1A1] border border-solid border-[#2E2E2E] bg-black py-1 px-2.5 rounded text-13"
                     name="email"
+                />
+                <label className={labelStyles}>Username:</label>
+                <input
+                    type="username"
+                    placeholder="Username"
+                    className="w-full h-8 text-[#A1A1A1] border border-solid border-[#2E2E2E] bg-black py-1 px-2.5 rounded text-13"
+                    name="username"
                 />
 
                 <label className={labelStyles}>Password:</label>

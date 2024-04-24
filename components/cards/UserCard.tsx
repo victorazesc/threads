@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import { Button } from "../ui/button";
+import { Avatar } from "../ui/avatar";
 
 interface Props {
   id: string;
@@ -22,11 +23,14 @@ function UserCard({ id, name, username, imgUrl, personType }: Props) {
     <article className='user-card'>
       <div className='user-card_avatar'>
         <div className='relative h-12 w-12'>
-          <Image
+          <Avatar
+            name={name.length > 0 ? name : "Threads"}
             src={imgUrl}
-            alt='user_logo'
-            fill
-            className='rounded-full object-cover'
+            size={48}
+            showTooltip={false}
+            shape="circle"
+            fallbackBackgroundColor="bg-custom-backgrounds-secondary"
+            className={`capitalize`}
           />
         </div>
 

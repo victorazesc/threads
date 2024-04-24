@@ -1,6 +1,6 @@
 "use client"
 
-import { sidebarLinks } from "@/constants"
+import { sidebarLinks } from "@/constants/tabs"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useRouter } from "next/navigation"

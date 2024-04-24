@@ -1,5 +1,8 @@
 import { withAuth } from "next-auth/middleware"
 
+
+
+
 export default withAuth({
     // Matches the pages config in `[...nextauth]`
     pages: {
@@ -8,4 +11,15 @@ export default withAuth({
     },
 })
 
-export const config = { matcher: ["/((?!api|static|.*\\..*|_next).*)",], }
+export const config = {
+    matcher: [
+        "/",
+        "/activity",
+        "/communities",
+        "/create-thread",
+        "/profile",
+        "/search",
+        "/thread",
+        "/onboarding"
+    ]
+}

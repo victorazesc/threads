@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { formatDateString } from "@/libs/utils";
 import DeleteThread from "../forms/DeleteThread";
+import { Avatar } from "../ui/avatar";
 
 interface Props {
   id: string;
@@ -23,6 +24,7 @@ interface Props {
   comments: {
     author: {
       image: string;
+      name: string;
     };
   }[];
   isComment?: boolean;
@@ -41,19 +43,21 @@ function ThreadCard({
 }: Props) {
   return (
     <article
-      className={`flex w-full flex-col rounded-xl ${
-        isComment ? "px-0 xs:px-7" : "bg-dark-2 p-7"
-      }`}
+      className={`flex w-full flex-col rounded-xl ${isComment ? "px-0 xs:px-7" : "bg-dark-2 p-7"
+        }`}
     >
       <div className='flex items-start justify-between'>
         <div className='flex w-full flex-1 flex-row gap-4'>
           <div className='flex flex-col items-center'>
             <Link href={`/profile/${author.id}`} className='relative h-11 w-11'>
-              <Image
+              <Avatar
+                name={author.name?.length > 0 ? author.name : "Threads"}
                 src={author.image}
-                alt='user_community_image'
-                fill
-                className='cursor-pointer rounded-full'
+                size={44}
+                showTooltip={true}
+                shape="circle"
+                fallbackBackgroundColor="bg-custom-backgrounds-secondary"
+                className="capitalize"
               />
             </Link>
 
@@ -124,15 +128,16 @@ function ThreadCard({
       </div>
 
       {!isComment && comments.length > 0 && (
-        <div className='ml-1 mt-3 flex items-center gap-2'>
+        <div className='ml-1 mt-3 flex items-center gap-2 relative'>
           {comments.slice(0, 2).map((comment, index) => (
-            <Image
-              key={index}
+            <Avatar
+              name={comment.author.name?.length > 0 ? comment.author.name : "Threads"}
               src={comment.author.image}
-              alt={`user_${index}`}
-              width={24}
-              height={24}
-              className={`${index !== 0 && "-ml-5"} rounded-full object-cover`}
+              size={24}
+              showTooltip={false}
+              shape="circle"
+              fallbackBackgroundColor="bg-custom-backgrounds-secondary"
+              className={`capitalize`}
             />
           ))}
 
@@ -153,13 +158,14 @@ function ThreadCard({
             {formatDateString(createdAt)}
             {community && ` - ${community.name} Community`}
           </p>
-
-          <Image
+          <Avatar
+            name={community.name.length > 0 ? community.name : "Threads"}
             src={community.image}
-            alt={community.name}
-            width={14}
-            height={14}
-            className='ml-1 rounded-full object-cover'
+            size={14}
+            showTooltip={false}
+            shape="circle"
+            fallbackBackgroundColor="bg-custom-backgrounds-secondary"
+            className={`capitalize`}
           />
         </Link>
       )}

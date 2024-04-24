@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 // import { SignOutButton, SignedIn, useAuth } from "@clerk/nextjs";
 
-import { sidebarLinks } from "@/constants";
+import { sidebarLinks } from "@/constants/tabs";
 import { UserMenu } from "./UserMenu";
 import { useSession } from "next-auth/react";
 

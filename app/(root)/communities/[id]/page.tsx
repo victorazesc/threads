@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { communityTabs } from "@/constants";
+import { communityTabs } from "@/constants/tabs";
 
 import UserCard from "@/components/cards/UserCard";
 import ThreadsTab from "@/components/shared/ThreadsTab";

@@ -4,8 +4,10 @@ import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcryptjs";
-import User from "@/models/user.model";
-import { validateGoogleSign } from "@/actions/user.actions";
+import { AUTH_PAGES } from "@/constants/common";
+import { signWithPassword, validateGoogleSign } from "@/actions/user.actions";
+import { UserDocument } from "@/types/types";
+
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -23,20 +25,18 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        await connectDB();
-        const userFound = await User.findOne({
-          email: credentials?.email,
-        }).select("+password");
+        try {
+          const result: UserDocument | any = await signWithPassword({ email: credentials!!.email, sendedPassword: credentials?.password })
 
-        if (!userFound) throw new Error("Invalid Email");
+          if (!result) {
+            throw new Error('Desculpe, não foi possível encontrar um usuário com as credenciais fornecidas. Tente novamente.')
+          }
 
-        const passwordMatch = await bcrypt.compare(
-          credentials!.password,
-          userFound.password
-        );
+          return result
+        } catch (error: Error | any) {
+          throw new Error(error.message ?? error);
+        }
 
-        if (!passwordMatch) throw new Error("Invalid Password");
-        return userFound;
       },
     }),
   ],
@@ -49,17 +49,16 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user, trigger, session, profile, account }: any) {
       if (profile && account?.provider === 'google') {
-          user = await validateGoogleSign({ profile })
+        user = await validateGoogleSign({ profile })
       }
 
       if (trigger === "update") {
-          return { ...token, ...session.user };
+        return { ...token, ...session.user };
       }
       return { ...token, ...user };
-  },
+    },
     async session({ session, token }) {
       session.user = token as any;
-      // console.log(session.user, 'vei oda sessao')
       return session;
     },
   },

@@ -1,9 +1,12 @@
 import { redirect } from "next/navigation";
-import { fetchUser } from "@/actions/user.actions";
+import { fetchUser, igoreOnboard } from "@/actions/user.actions";
 import AccountProfile from "@/components/forms/AccountProfile";
 import { Session, getServerSession } from "next-auth";
 import { authOptions } from "@/libs/auth";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { signOut } from "next-auth/react";
+import SignOutButton from "@/components/account/SignOutButton";
+import SkipOnboarding from "@/components/account/SkipOnboarding";
 
 async function Page() {
 
@@ -19,7 +22,7 @@ async function Page() {
   if (userInfo?.onboarded) redirect("/");
 
   const userData = {
-    id: user.id,
+    id: user._id,
     objectId: userInfo?.id,
     username: userInfo ? userInfo?.username : user.username,
     name: userInfo ? userInfo?.name : "",
@@ -31,8 +34,9 @@ async function Page() {
   return (
     <>
       <nav className="w-full flex justify-between text-primary px-8 py-6 sticky top-0 h-14 bg-custom-backgrounds-secondary">
-        <div className="flex gap-2"><ChevronLeft />Voltar</div>
-        <div className="flex gap-2">Ignorar<ChevronRight /></div>
+
+        <div className="flex gap-2"><ChevronLeft /> <SignOutButton label="Voltar" /></div>
+        <div className="flex gap-2"><SkipOnboarding id={user.email} /><ChevronRight /></div>
 
       </nav>
       <main className='mx-auto flex w-full max-w-sm flex-col justify-start py-20'>

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { redirect } from "next/navigation";
 
-import { profileTabs } from "@/constants";
+
 
 import ThreadsTab from "@/components/shared/ThreadsTab";
 import ProfileHeader from "@/components/shared/ProfileHeader";
@@ -10,14 +10,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { fetchUser, fetchUserById } from "@/actions/user.actions";
 import { Session, getServerSession } from "next-auth";
 import { authOptions } from "@/libs/auth";
+import { profileTabs } from "@/constants/tabs";
 
 async function Page({ params }: { params: { id: string } }) {
     const session: Session | null = await getServerSession(authOptions);
 
     const user = session?.user
-  
+
     if (!user) {
-      return null; // to avoid typescript warnings
+        return null; // to avoid typescript warnings
     }
 
     const userInfo = await fetchUserById(params.id);
@@ -62,13 +63,16 @@ async function Page({ params }: { params: { id: string } }) {
                             value={tab.value}
                             className='w-full text-light-1'
                         >
-                            <h1>asda</h1>
+                            {/* <h1>{tab.value}</h1> */}
                             {/* @ts-ignore */}
-                            <ThreadsTab
-                                currentUserId={user._id}
-                                accountId={userInfo._id}
-                                accountType='User'
-                            />
+                            {tab.content &&
+                                <tab.content
+                                    currentUserId={user._id}
+                                    accountId={userInfo._id}
+                                    accountType='User'
+                                />
+                            }
+
                         </TabsContent>
                     ))}
                 </Tabs>

@@ -1,3 +1,6 @@
+import RepliesTab from "@/components/shared/RepliesTab";
+import ThreadsTab from "@/components/shared/ThreadsTab";
+
 export const sidebarLinks = [
     {
         imgURL: "/assets/home.svg",
@@ -32,8 +35,8 @@ export const sidebarLinks = [
 ];
 
 export const profileTabs = [
-    { value: "threads", label: "Threads", icon: "/assets/reply.svg" },
-    { value: "replies", label: "Replies", icon: "/assets/members.svg" },
+    { value: "threads", content: ThreadsTab, label: "Threads", icon: "/assets/reply.svg" },
+    { value: "replies", content: RepliesTab, label: "Replies", icon: "/assets/members.svg" },
     { value: "tagged", label: "Tagged", icon: "/assets/tag.svg" },
 ];
 

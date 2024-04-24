@@ -4,16 +4,20 @@ import React from 'react';
 import { signOut } from "next-auth/react";
 import { LogOut } from 'lucide-react';
 
-const SignOutButton = () => {
+interface IProps {
+    label?: string
+    noIcon?: boolean
+}
+
+const SignOutButton = ({ label, noIcon }: IProps) => {
     return (
         <button
-            className="flex items-center w-full h-full gap-2"
             onClick={() => {
                 signOut();
             }}
         >
-            <LogOut />
-            <span>Sair</span>
+            {noIcon && <LogOut />}
+            <span>{label ?? 'Sair'}</span>
         </button>
     )
 }

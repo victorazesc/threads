@@ -6,13 +6,12 @@ import { revalidatePath } from "next/cache";
 import Community from "../models/community.model";
 import Thread from "../models/thread.model";
 import User from "../models/user.model";
-import { ObjectId } from 'mongodb';
 import { connectDB } from "../libs/mongodb";
 import { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { GoogleProfile } from "next-auth/providers/google";
-import { UserDocument } from "@/types/types";
 import { signJwtAccessToken } from "@/libs/jwt";
+import bcrypt from 'bcryptjs';
 
 export async function fetchUser(email: string) {
   try {
@@ -85,7 +84,7 @@ export async function updateUser({
     await User.findOneAndUpdate(
       { email },
       {
-        username: username.toLowerCase(),
+        username: username && username.toLowerCase(),
         name,
         email,
         bio,
@@ -98,6 +97,21 @@ export async function updateUser({
     if (path === "/profile/edit") {
       revalidatePath(path);
     }
+  } catch (error: any) {
+    throw new Error(`Failed to create/update user: ${error.message}`);
+  }
+}
+
+export async function igoreOnboard(email: string) {
+  try {
+    connectDB();
+    await User.findOneAndUpdate(
+      { email },
+      {
+        onboarded: true,
+      },
+
+    );
   } catch (error: any) {
     throw new Error(`Failed to create/update user: ${error.message}`);
   }
@@ -128,6 +142,36 @@ export async function fetchUserPosts(userId: string) {
         },
       ],
     });
+    return threads;
+  } catch (error) {
+    console.error("Error fetching user threads:", error);
+    throw error;
+  }
+}
+export async function fetchUserReplies(userId: string) {
+  try {
+    connectDB();
+
+    // Find all threads authored by the user with the given userId
+    const threads = await Thread.find().populate([{
+      path: "children",
+      model: Thread,
+      populate: {
+        path: "author",
+        model: User,
+        select: "name image id", // Select the "name" and "_id" fields from the "User" model
+      },
+
+    },
+    {
+      path: "author",
+      model: User,
+      match: {
+        author: { id: userId }
+      },
+      select: "name image id", // Select the "name" and "_id" fields from the "User" model
+    },
+    ],);
     return threads;
   } catch (error) {
     console.error("Error fetching user threads:", error);
@@ -260,4 +304,48 @@ export async function validateGoogleSign({ profile }: { profile: GoogleProfile }
 
   return result;
 
+}
+
+export async function signWithPassword({ email, sendedPassword }: { email: string, sendedPassword?: string }) {
+  await connectDB();
+  if (!sendedPassword) return null
+  const userFound = await User.findOne({ email }).select("+password");
+  if (!userFound) return null
+
+  if (userFound && await comparePasswords(sendedPassword, userFound.password)) {
+    const { password, ...userWithoutPass } = userFound._doc;
+    const accessToken = signJwtAccessToken(userWithoutPass);
+    const result = {
+      ...userWithoutPass,
+      accessToken,
+    };
+    return result;
+  } else return null;
+
+}
+
+export async function hashPassword(password: string): Promise<string> {
+  try {
+    // Gera o salt para hashing
+    const salt = await bcrypt.genSalt(10);
+    // Gera o hash da senha
+    const hashedPassword = await bcrypt.hash(password, salt);
+    return hashedPassword;
+  } catch (error) {
+    console.error('Erro ao gerar hash da senha:', error);
+    throw new Error('Erro ao gerar hash da senha');
+  }
+}
+
+export async function comparePasswords(plainPassword: string, hashedPassword: string | null) {
+  try {
+    console.log(plainPassword, hashedPassword)
+    if (!hashedPassword) throw new Error
+    // Compara a senha fornecida com o hash armazenado
+    const isMatch = await bcrypt.compare(plainPassword, hashedPassword);
+    return isMatch;
+  } catch (error) {
+    console.error('Erro ao comparar senhas:', error);
+    throw new Error('Erro ao comparar senhas');
+  }
 }

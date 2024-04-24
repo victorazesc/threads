@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { Avatar } from "../ui/avatar";
 
 interface Props {
   accountId: string;
@@ -25,11 +26,14 @@ function ProfileHeader({
       <div className='flex items-center justify-between'>
         <div className='flex items-center gap-3'>
           <div className='relative h-20 w-20 object-cover'>
-            <Image
+            <Avatar
+              name={name.length > 0 ? name : "Threads"}
               src={imgUrl}
-              alt='logo'
-              fill
-              className='rounded-full object-cover shadow-2xl'
+              size={80}
+              showTooltip={true}
+              shape="circle"
+              fallbackBackgroundColor="bg-custom-backgrounds-secondary"
+              className="capitalize"
             />
           </div>
 
@@ -45,11 +49,10 @@ function ProfileHeader({
             <div className='flex cursor-pointer gap-3 rounded-lg bg-dark-3 px-4 py-2'>
               <Image
                 src='/assets/edit.svg'
-                alt='logout'
+                alt='editar'
                 width={16}
                 height={16}
               />
-
               <p className='text-light-2 max-sm:hidden'>Editar</p>
             </div>
           </Link>
