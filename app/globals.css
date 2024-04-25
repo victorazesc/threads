@@ -6,7 +6,7 @@
 
   /* main */
   .main-container {
-    @apply flex min-h-screen flex-1 flex-col items-center bg-dark-1 px-6 pb-10 pt-28 max-md:pb-32 sm:px-10;
+    @apply flex min-h-screen flex-1 flex-col items-center bg-custom-backgrounds-primary px-6 pb-10 pt-28 max-md:pb-32 sm:px-10;
   }
 
   /* Head Text */
@@ -37,6 +37,7 @@
   .thread-card_bar {
     @apply relative mt-2 w-0.5 grow rounded-full bg-neutral-800;
   }
+
   .thread-reply_bar {
     @apply relative mt-2 w-0.5 -mb-6 grow rounded-full bg-neutral-800;
   }
@@ -63,7 +64,23 @@
   }
 
   .topbar {
-    @apply fixed top-0 z-30 flex w-full items-center justify-between bg-dark-2 px-6 py-3;
+    display: grid;
+    margin-right: auto;
+    margin-left: auto;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 75px;
+    max-width: 1230px;
+    grid-template-columns: 1fr max-content 1fr;
+  }
+
+  @media (max-width: 700px) {
+
+    .topbar {
+      grid-template-columns: 1fr 50vw 1fr;
+    }
   }
 
   .bottombar {
@@ -83,7 +100,7 @@
   }
 
   .leftsidebar_link {
-    @apply relative flex justify-start gap-4 rounded-lg p-4;
+    @apply relative flex justify-start gap-4 rounded-lg;
   }
 
   .pagination {

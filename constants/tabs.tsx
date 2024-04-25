@@ -1,34 +1,30 @@
 import RepliesTab from "@/components/shared/RepliesTab";
 import ThreadsTab from "@/components/shared/ThreadsTab";
+import { Heart, HomeIcon, Search, SquarePen, User2 } from "lucide-react";
 
 export const sidebarLinks = [
     {
-        imgURL: "/assets/home.svg",
+        imgURL: HomeIcon,
         route: "/",
         label: "Home",
     },
     {
-        imgURL: "/assets/search.svg",
+        imgURL: Search,
         route: "/search",
         label: "Search",
     },
     {
-        imgURL: "/assets/heart.svg",
-        route: "/activity",
-        label: "Activity",
-    },
-    {
-        imgURL: "/assets/create.svg",
+        imgURL: SquarePen,
         route: "/create-thread",
         label: "Create Thread",
     },
     {
-        imgURL: "/assets/community.svg",
-        route: "/communities",
-        label: "Communities",
+        imgURL: Heart,
+        route: "/activity",
+        label: "Activity",
     },
     {
-        imgURL: "/assets/user.svg",
+        imgURL: User2,
         route: "/profile",
         label: "Profile",
     },

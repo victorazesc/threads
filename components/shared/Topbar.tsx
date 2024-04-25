@@ -1,38 +1,29 @@
 import Link from "next/link";
 import Image from "next/image";
-import { UserMenu } from "./UserMenu";
-// import { OrganizationSwitcher, SignOutButton, SignedIn } from "@clerk/nextjs";
-// import { dark } from "@clerk/themes"
+import TopbarMenu from "./TopBarMenu";
 
 export default function Topbar() {
     const isUserLoggedIn = true
     return (
-        <nav className="topbar">
-            <Link href="/" className="flex items-center gap-4">
-                <Image src="/assets/logo.svg" alt="logo" width={28} height={28} />
-                <p className="text-heading3-bold text-light-1 max-xs:hidden">
-                    Threads
-                </p>
+
+
+        <header className="topbar max-w-4xl">
+            <div className="hidden max-md:flex"></div>
+
+            <Link href="/" className="items-center gap-4 flex max-md:hidden">
+                <Image src="/assets/logo.svg" alt="logo" width={35} height={35} />
             </Link>
-
-            <div className="flex items-center gap-1">
-                <div className="block md:hidden">
-                    <UserMenu />
-
-                </div>
-
-                {/* <OrganizationSwitcher
-
-                    appearance={{
-                        baseTheme: dark,
-                        elements: {
-                            organizationSwitcherTrigger: "py-2 px-4"
-                        }
-                    }}
-                >
-
-                </OrganizationSwitcher> */}
+            <div className="flex items-center gap-1 justify-center">
+                <Link href="/" className="items-center gap-4 hidden max-md:flex">
+                    <Image src="/assets/logo.svg" alt="logo" width={35} height={35} />
+                </Link>
+                <TopbarMenu />
             </div>
-        </nav>
+
+
+
+        </header>
+
+
     )
 }
