@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import Link from "next/link";
 import SignOutButton from "../account/SignOutButton";
-import { CreditCard, User, UserCircle2 } from "lucide-react";
+import { AlignRight, CreditCard, User, UserCircle2 } from "lucide-react";
 
 // const EditProfile = dynamic(() => import('./EditProfile'), {
 //     ssr: false
@@ -25,7 +25,7 @@ export function UserMenu() {
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <button className="text-sm px-4 py-2 font-medium transition-all text-[#A1A1A1] hover:text-[#EDEDED]">
-                        <UserCircle2 />
+                        <AlignRight size={40} />
                     </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-40">

@@ -13,7 +13,8 @@ export default function TopbarMenu() {
     const { data: session, status } = useSession()
     if (status === 'loading') {
         <>carregando</>
-    } else {
+    }
+    else {
         return (
             <div className='grid w-full max-md:hidden mt-1' style={{ gridTemplateColumns: "repeat(5, 20%)" }}>
                 {sidebarLinks.map((link) => {

@@ -1,12 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import TopbarMenu from "./TopBarMenu";
+import { UserMenu } from "./UserMenu";
 
 export default function Topbar() {
     const isUserLoggedIn = true
     return (
-
-
         <header className="topbar max-w-4xl">
             <div className="hidden max-md:flex"></div>
 
@@ -19,11 +18,9 @@ export default function Topbar() {
                 </Link>
                 <TopbarMenu />
             </div>
-
-
-
+            <div className="items-center justify-end gap-4 flex" >
+                <UserMenu />
+            </div>
         </header>
-
-
     )
 }
