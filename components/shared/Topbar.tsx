@@ -6,15 +6,15 @@ import { UserMenu } from "./UserMenu";
 export default function Topbar() {
     const isUserLoggedIn = true
     return (
-        <header className="topbar max-w-4xl">
+        <header className="topbar h-[60px] md:h-[74px] max-w-[1230px] bg-glassmorphism backdrop-blur-3xl z-10">
             <div className="hidden max-md:flex"></div>
 
-            <Link href="/" className="items-center gap-4 flex max-md:hidden">
-                <Image src="/assets/logo.svg" alt="logo" width={35} height={35} />
+            <Link href="/" className="items-center gap-4 ml-5 flex max-md:hidden">
+                <Image src="/assets/logo.svg" alt="logo" width={32} height={32} />
             </Link>
             <div className="flex items-center gap-1 justify-center">
                 <Link href="/" className="items-center gap-4 hidden max-md:flex">
-                    <Image src="/assets/logo.svg" alt="logo" width={35} height={35} />
+                    <Image src="/assets/logo.svg" alt="logo" width={32} height={32} />
                 </Link>
                 <TopbarMenu />
             </div>

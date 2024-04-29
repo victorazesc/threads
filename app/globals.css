@@ -6,7 +6,7 @@
 
   /* main */
   .main-container {
-    @apply flex min-h-screen flex-1 flex-col items-center bg-custom-backgrounds-primary px-6 pb-10 pt-28 max-md:pb-32 sm:px-10;
+    @apply flex min-h-screen flex-1 flex-col items-center bg-custom-backgrounds-primary px-6 pb-10 pt-[74px] max-md:pb-32 max-md:px-0 max-md:pt-12 sm:px-10;
   }
 
   /* Head Text */
@@ -84,7 +84,7 @@
   }
 
   .bottombar {
-    @apply fixed bottom-0 z-10 w-full rounded-t-3xl bg-glassmorphism p-4 backdrop-blur-lg xs:px-7 md:hidden;
+    @apply fixed bottom-0 z-10 w-full rounded-t-3xl bg-glassmorphism p-4 backdrop-blur-3xl xs:px-7 md:hidden;
   }
 
   .bottombar_container {
@@ -142,7 +142,10 @@
     --barcelona-primary-background: rgb(16, 16, 16);
     --barcelona-secondary-background: rgb(10, 10, 10);
     --barcelona-tertiary-background: rgb(30, 30, 30);
+    --barcelona-elevated-background: rgb(24, 24, 24);
     --barcelona-primary-icon: rgb(243, 245, 247);
+    --barcelona-charcoal-icon: rgb(204, 204, 204);
+    --barcelona-navigation-icon: rgb(77, 77, 77);
     /* Font Sizes */
     --system-10-font-size: 10px;
     --system-11-font-size: 11px;

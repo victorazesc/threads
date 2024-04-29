@@ -174,6 +174,8 @@ module.exports = {
     extend: {
       colors: {
         "primary-outline": "var(--barcelona-primary-outline)",
+        "charcoal-icon": "var(--barcelona-charcoal-icon)",
+        "navigation-icon": "var(--barcelona-navigation-icon)",
         "primary": "var(--barcelona-primary-text)",
         "secondary": "var(--barcelona-secondary-text)",
         "primary-500": "#877EFF",
@@ -196,6 +198,7 @@ module.exports = {
             "primary": "var(--barcelona-primary-background)",
             "tertiary": "var(--barcelona-tertiary-background)",
             "secondary": "var(--barcelona-secondary-background)",
+            "elevated": "var(--barcelona-elevated-background)",
           }
         }
       },

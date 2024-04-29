@@ -16,7 +16,7 @@ export default function TopbarMenu() {
     }
     else {
         return (
-            <div className='grid w-full max-md:hidden mt-1' style={{ gridTemplateColumns: "repeat(5, 20%)" }}>
+            <div className='grid w-[620px] px-[70px] max-md:hidden mt-1' style={{ gridTemplateColumns: "repeat(5, 20%)" }}>
                 {sidebarLinks.map((link) => {
                     const isActive =
                         (pathname.includes(link.route) && link.route.length > 1) ||
@@ -30,10 +30,10 @@ export default function TopbarMenu() {
                             href={link.route}
                             key={link.label}
 
-                            className={`${isActive && "bg-primary-500"} p-6 rounded-2xl`}
+                            className={`${isActive ? 'text-primary' : 'text-navigation-icon'} p-6 rounded-2xl flex items-center justify-center`}
                         >
 
-                            <link.imgURL />
+                            <link.imgURL size={28}/>
 
                             <p className='text-light-1 md:hidden'>{link.label}</p>
                         </Link>

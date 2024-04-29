@@ -24,8 +24,8 @@ export function UserMenu() {
         <Dialog>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <button className="text-sm px-4 py-2 font-medium transition-all text-[#A1A1A1] hover:text-[#EDEDED]">
-                        <AlignRight size={40} />
+                    <button className="text-sm px-4 py-2 font-medium transition-all text-secondary hover:text-[#EDEDED]">
+                        <AlignRight size={30} />
                     </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-40">

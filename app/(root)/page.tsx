@@ -7,6 +7,7 @@ import { fetchPosts } from "@/actions/thread.actions";
 import { fetchUser } from "@/actions/user.actions";
 import { authOptions } from "@/libs/auth";
 import { Session, getServerSession } from "next-auth";
+import { CreateThread } from "@/components/dialogs/CreateThread";
 
 async function Home({
   searchParams,
@@ -30,9 +31,8 @@ async function Home({
 
   return (
     <>
-      <h1 className='head-text text-left'>Home</h1>
-
-      <section className='mt-9 flex flex-col gap-10'>
+      <CreateThread className="hidden sm:flex" />
+      <section className='mt-4 flex flex-col gap-2'>
         {result.posts.length === 0 ? (
           <p className='no-result'>No threads found</p>
         ) : (

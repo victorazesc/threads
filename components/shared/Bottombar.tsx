@@ -15,7 +15,7 @@ export default function Bottombar() {
                 {sidebarLinks.map((link) => {
                     const isActive = (pathName.includes(link.route) && link.route.length > 1) || pathName === link.route
                     return (
-                        <Link key={link.label} href={link.route} className={`bottombar_link ${isActive && 'bg-primary-500'}`} >
+                        <Link key={link.label} href={link.route} className={`bottombar_link ${isActive ? 'text-primary' : 'text-secondary'}`} >
                             <link.imgURL />
                             <p className="text-subtle-medium text-light-1 max-sm:hidden">
                                 {link.label.split(/\s+/)[0]}
