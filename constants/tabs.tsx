@@ -17,6 +17,7 @@ export const sidebarLinks = [
         imgURL: SquarePen,
         route: "/create-thread",
         label: "Create Thread",
+        dialog: true
     },
     {
         imgURL: Heart,

@@ -6,6 +6,8 @@ import { sidebarLinks } from "@/constants/tabs";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { CreateThread } from "../dialogs/CreateThread";
+import { DialogTrigger } from "../ui/dialog";
 
 export default function TopbarMenu() {
     const pathname = usePathname();
@@ -25,18 +27,28 @@ export default function TopbarMenu() {
                     if (link.route === "/profile") link.route = `${link.route}/${session?.user._id}`;
 
                     return (
+                        <>
 
-                        <Link
-                            href={link.route}
-                            key={link.label}
-
-                            className={`${isActive ? 'text-primary' : 'text-navigation-icon'} p-6 rounded-2xl flex items-center justify-center`}
-                        >
-
-                            <link.imgURL size={28}/>
-
-                            <p className='text-light-1 md:hidden'>{link.label}</p>
-                        </Link>
+                            {link.dialog ?
+                                <CreateThread hiddenTrigger={true}>
+                                    <DialogTrigger asChild>
+                                        <span className={`p-6 rounded-2xl flex items-center justify-center ${isActive ? 'text-primary' : 'text-navigation-icon'}`}>
+                                            <link.imgURL size={28} />
+                                            <p className='text-primary md:hidden'>{link.label}</p>
+                                        </span>
+                                    </DialogTrigger>
+                                </CreateThread>
+                                :
+                                <Link
+                                    href={link.route}
+                                    key={link.label}
+                                    className={`${isActive ? 'text-primary' : 'text-navigation-icon'} p-6 rounded-2xl flex items-center justify-center`}
+                                >
+                                    <link.imgURL size={28} />
+                                    <p className='text-primary md:hidden'>{link.label}</p>
+                                </Link>
+                            }
+                        </>
                     );
                 })}
             </div>

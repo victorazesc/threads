@@ -127,6 +127,7 @@ export async function createThread({ text, author, communityId, path }: Params
     // }
 
     revalidatePath(path);
+    return createdThread
   } catch (error: any) {
     throw new Error(`Failed to create thread: ${error.message}`);
   }
