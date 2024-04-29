@@ -37,7 +37,7 @@ export default function RootLayout({
 
             <main className='flex flex-row'>
               <section className='main-container'>
-                <div className='w-full max-w-[620px] pl-6'>{children}</div>
+                <div className='w-full max-w-[620px] px-4'>{children}</div>
               </section>
             </main>
 

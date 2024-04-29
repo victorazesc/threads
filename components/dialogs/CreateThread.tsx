@@ -41,7 +41,7 @@ const CreateThreadInput = ({ user, onChange, placeholder, value }: any) => {
             </div>
             <div style={{ gridRowEnd: "span 2", gridColumnStart: 2, gridRowStart: 2 }} >
                 <div className="relative">
-                    <div className="select-text whitespace-pre-wrap break-words text-15 relative focus-visible:outline-none text-primary" contentEditable="true" role="textbox" spellCheck="true" tabIndex={0} data-lexical-editor="true" onInput={(e) => onChange(e.target.innerText)}>
+                    <div className="select-text whitespace-pre-wrap break-words text-15 relative focus-visible:outline-none text-primary" contentEditable="true" role="textbox" spellCheck="true" tabIndex={0} data-lexical-editor="true" onInput={(e: any) => onChange(e.target.innerText)}>
                         <p style={{ pointerEvents: "all" }}>
                             <br />
                         </p>
@@ -70,7 +70,7 @@ const CreateThreadInput = ({ user, onChange, placeholder, value }: any) => {
 interface IProps {
     className?: string
     hiddenTrigger: boolean
-    children: React.ReactElement
+    children?: React.ReactElement
 }
 
 export function CreateThread({ className, hiddenTrigger = false, children }: IProps) {
