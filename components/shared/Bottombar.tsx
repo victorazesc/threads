@@ -18,8 +18,7 @@ export default function Bottombar() {
                 {sidebarLinks.map((link) => {
                     const isActive = (pathName.includes(link.route) && link.route.length > 1) || pathName === link.route
                     return (
-                        <>
-
+                        <div key={link.label}>
                             {link.dialog ?
                                 <CreateThread hiddenTrigger={true}>
                                     <DialogTrigger asChild>
@@ -39,7 +38,7 @@ export default function Bottombar() {
                                     </p>
                                 </Link>
                             }
-                        </>
+                        </div>
 
 
                     )

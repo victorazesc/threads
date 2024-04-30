@@ -46,7 +46,7 @@ async function RepliesTab({ currentUserId, accountId, accountType }: Props) {
   }
 
   return (
-    <section className='mt-9 flex flex-col gap-10'>
+    <section className='mt-9 flex flex-col gap-2'>
 
       {result.posts.map((thread: { _id: string; parentId: string | null; text: string; author: { username: any; name: any; image: any; id: any; }; community: { id: string; name: string; image: string; } | null; createdAt: string; children: { text: string, author: { image: string; name: string; }; }[]; }) => (
         <ReplyCard

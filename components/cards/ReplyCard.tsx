@@ -45,7 +45,7 @@ function ReplyCard({
 }: Props) {
   return (
     <article
-      className={`flex w-full flex-col rounded-xl ${isComment ? "px-0 xs:px-7" : "bg-dark-2 p-7"
+      className={`flex w-full flex-col border-t-[0.5px] border-primary-outline ${isComment ? "xs:px-7" : "py-3"
         }`}
     >
       <div className='flex items-start justify-between mb-2'>
@@ -133,7 +133,7 @@ function ReplyCard({
         <div>
           {comments.slice(0, 2).map((comment, index) => (
 
-            <div className='flex items-start justify-between'>
+            <div className='flex items-start justify-between' key={index}>
               <div className='flex w-full flex-1 flex-row gap-4 mt-6'>
                 <div className='flex flex-col items-center'>
                   <Link href={`/profile/${author.id}`} className='relative h-11 w-11'>
@@ -217,25 +217,6 @@ function ReplyCard({
             </div>
           ))}
         </div>
-        // <div className='ml-1 mt-3 flex items-center gap-2 relative'>
-        //   {comments.slice(0, 2).map((comment, index) => (
-        //     <Avatar
-        //       name={comment?.author?.name?.length > 0 ? comment?.author?.name : "Threads"}
-        //       src={comment?.author?.image}
-        //       size={24}
-        //       showTooltip={false}
-        //       shape="circle"
-        //       fallbackBackgroundColor="bg-custom-backgrounds-secondary"
-        //       className={`capitalize`}
-        //     />
-        //   ))}
-
-        //   <Link href={`/thread/${id}`}>
-        //     <p className='mt-1 text-subtle-medium text-gray-1'>
-        //       {comments.length} repl{comments.length > 1 ? "ies" : "y"}
-        //     </p>
-        //   </Link>
-        // </div>
       )}
 
       {!isComment && community && (

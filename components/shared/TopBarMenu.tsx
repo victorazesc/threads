@@ -27,7 +27,7 @@ export default function TopbarMenu() {
                     if (link.route === "/profile") link.route = `${link.route}/${session?.user._id}`;
 
                     return (
-                        <>
+                        <div key={link.label}>
 
                             {link.dialog ?
                                 <CreateThread hiddenTrigger={true}>
@@ -48,7 +48,7 @@ export default function TopbarMenu() {
                                     <p className='text-primary md:hidden'>{link.label}</p>
                                 </Link>
                             }
-                        </>
+                        </div>
                     );
                 })}
             </div>

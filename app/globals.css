@@ -203,8 +203,15 @@
 
 /* Tab */
 .tab {
-  @apply flex min-h-[50px] flex-1 items-center gap-3 bg-dark-2 text-light-2 data-[state=active]:bg-[#0e0e12] data-[state=active]:text-light-2 !important;
+  @apply flex min-h-[50px] flex-1 transition-all duration-1000 items-center data-[state=active]:border-primary border-b border-primary-outline bg-transparent text-secondary data-[state=active]:text-primary !important;
 }
+
+
+
+
+
+
+
 
 .no-focus {
   @apply focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important;

@@ -26,6 +26,7 @@ async function Page({ params }: { params: { id: string } }) {
 
     return (
         <section>
+          
             <ProfileHeader
                 accountId={userInfo.id}
                 authUserId={user._id}
@@ -39,23 +40,11 @@ async function Page({ params }: { params: { id: string } }) {
                 <Tabs defaultValue='threads' className='w-full'>
                     <TabsList className='tab'>
                         {profileTabs.map((tab) => (
-                            <TabsTrigger key={tab.label} value={tab.value} className='tab'>
-                                <Image
-                                    src={tab.icon}
-                                    alt={tab.label}
-                                    width={24}
-                                    height={24}
-                                    className='object-contain'
-                                />
+                            <TabsTrigger key={tab.label} id={tab.value} value={tab.value} className='tab'>
                                 <p className='max-sm:hidden'>{tab.label}</p>
-
-                                {tab.label === "Threads" && (
-                                    <p className='ml-1 rounded-sm bg-light-4 px-2 py-1 !text-tiny-medium text-light-2'>
-                                        {userInfo.threads.length}
-                                    </p>
-                                )}
                             </TabsTrigger>
                         ))}
+                        <span className="glider"></span>
                     </TabsList>
                     {profileTabs.map((tab) => (
                         <TabsContent

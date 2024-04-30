@@ -89,30 +89,23 @@ export function CreateThread({ className, hiddenTrigger = false, children }: IPr
     const pathname = usePathname();
 
     const handleCommentChange = (index: number, newValue: string) => {
-        // Cria uma cópia do array de comentários
         const updatedComments = [...comments];
-        // Atualiza o valor do comentário no índice especificado
         updatedComments[index] = { ...updatedComments[index], value: newValue };
-        // Atualiza o estado com a nova cópia do array
         setComments(updatedComments);
     };
 
     const handleDelete = (index: number) => {
-        // Cria uma cópia do array de comentários excluindo o item no índice especificado
         const updatedComments = comments.filter((_, i) => i !== index);
-        // Atualiza o estado com a nova cópia do array
         console.log(updatedComments)
         setComments(updatedComments);
     };
 
     const addComment = () => {
-        // Adiciona um novo comentário com um valor inicial vazio
         setComments([...comments, { value: '' }]);
     };
 
 
     const onSubmit = async (values: any) => {
-
         createThread({
             text: PrincipalThreadValue,
             author: session.user._id,
@@ -127,7 +120,6 @@ export function CreateThread({ className, hiddenTrigger = false, children }: IPr
             setComments([])
 
         });
-
         router.push("/");
     };
 
@@ -169,7 +161,7 @@ export function CreateThread({ className, hiddenTrigger = false, children }: IPr
                     <CreateThreadInput user={session?.user} onChange={setPrincipalThreadValue} value={PrincipalThreadValue} placeholder={"Inicia uma thread"} />
                     {comments.map((comment, index) => {
                         return (
-                            <div className="mt-4 relative">
+                            <div className="mt-4 relative" key={index}>
                                 <CreateThreadInput value={comment.value} user={session?.user} onChange={(value: string) => handleCommentChange(index, value)} placeholder={"Conta-nos mais"} />
                                 <Button variant={"ghost"} className="absolute top-0 right-0" onClick={() => handleDelete(index)}><X size={20} /></Button>
                             </div>

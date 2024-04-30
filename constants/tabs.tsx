@@ -1,6 +1,6 @@
 import RepliesTab from "@/components/shared/RepliesTab";
 import ThreadsTab from "@/components/shared/ThreadsTab";
-import { Heart, HomeIcon, Search, SquarePen, User2 } from "lucide-react";
+import { Heart, HomeIcon, MessageCircle, Search, SquarePen, Tags, User2, Users } from "lucide-react";
 
 export const sidebarLinks = [
     {
@@ -32,9 +32,9 @@ export const sidebarLinks = [
 ];
 
 export const profileTabs = [
-    { value: "threads", content: ThreadsTab, label: "Threads", icon: "/assets/reply.svg" },
-    { value: "replies", content: RepliesTab, label: "Replies", icon: "/assets/members.svg" },
-    { value: "tagged", label: "Tagged", icon: "/assets/tag.svg" },
+    { value: "threads", content: ThreadsTab, label: "Threads", icon: MessageCircle},
+    { value: "replies", content: RepliesTab, label: "Respostas", icon: Users },
+    { value: "tagged", label: "Republicações", icon: Tags },
 ];
 
 export const communityTabs = [
