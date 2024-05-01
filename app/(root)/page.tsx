@@ -31,7 +31,7 @@ async function Home({
 
   return (
     <>
-      <CreateThread className="hidden sm:flex" />
+      <CreateThread className="hidden sm:flex" hiddenTrigger={false} />
       <section className='mt-4 flex flex-col gap-2'>
         {result.posts.length === 0 ? (
           <p className='no-result'>No threads found</p>

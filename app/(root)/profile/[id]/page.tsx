@@ -1,9 +1,6 @@
 import Image from "next/image";
 import { redirect } from "next/navigation";
 
-
-
-import ThreadsTab from "@/components/shared/ThreadsTab";
 import ProfileHeader from "@/components/shared/ProfileHeader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -25,8 +22,8 @@ async function Page({ params }: { params: { id: string } }) {
     if (!userInfo?.onboarded) redirect("/onboarding");
 
     return (
-        <section>
-          
+        <section className="flex flex-col flex-grow">
+
             <ProfileHeader
                 accountId={userInfo.id}
                 authUserId={user._id}
@@ -36,8 +33,8 @@ async function Page({ params }: { params: { id: string } }) {
                 bio={userInfo.bio}
             />
 
-            <div className='mt-9'>
-                <Tabs defaultValue='threads' className='w-full'>
+            <div className='mt-9 flex flex-col flex-grow'>
+                <Tabs defaultValue='threads' className='w-full flex flex-col flex-grow'>
                     <TabsList className='tab'>
                         {profileTabs.map((tab) => (
                             <TabsTrigger key={tab.label} id={tab.value} value={tab.value} className='tab'>
@@ -50,10 +47,8 @@ async function Page({ params }: { params: { id: string } }) {
                         <TabsContent
                             key={`content-${tab.label}`}
                             value={tab.value}
-                            className='w-full text-light-1'
+                            className='w-full text-light-1 h-full'
                         >
-                            {/* <h1>{tab.value}</h1> */}
-                            {/* @ts-ignore */}
                             {tab.content &&
                                 <tab.content
                                     currentUserId={params.id}

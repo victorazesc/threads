@@ -36,8 +36,8 @@ export default function RootLayout({
 
 
             <main className='flex flex-row'>
-              <section className='main-container'>
-                <div className='w-full max-w-[620px] px-4'>{children}</div>
+              <section className='main-container flex flex-col flex-grow'>
+                <div className='w-full max-w-[620px] px-4 flex flex-col flex-grow'>{children}</div>
               </section>
             </main>
 
