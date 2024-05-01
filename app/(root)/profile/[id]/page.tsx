@@ -38,7 +38,7 @@ async function Page({ params }: { params: { id: string } }) {
                     <TabsList className='tab'>
                         {profileTabs.map((tab) => (
                             <TabsTrigger key={tab.label} id={tab.value} value={tab.value} className='tab'>
-                                <p className='max-sm:hidden'>{tab.label}</p>
+                                <p>{tab.label}</p>
                             </TabsTrigger>
                         ))}
                         <span className="glider"></span>
