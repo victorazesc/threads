@@ -21,7 +21,7 @@
 
   /* No Result */
   .no-result {
-    @apply text-center !text-base-regular text-light-3;
+    @apply text-center text-15 text-secondary;
   }
 
   /* Community Card */
@@ -52,15 +52,15 @@
   }
 
   .user-card_btn {
-    @apply h-auto min-w-[74px] rounded-lg bg-primary-500 text-[12px] text-light-1 !important;
+    @apply rounded-lg bg-custom-backgrounds-primary text-15 border border-primary-outline text-primary !important;
   }
 
   .searchbar {
-    @apply flex gap-1 rounded-lg bg-dark-3 px-4 py-2;
+    @apply flex gap-1 rounded-xl text-15 font-normal bg-custom-backgrounds-secondary mt-2 border border-primary-outline px-4 py-2;
   }
 
   .searchbar_input {
-    @apply border-none bg-dark-3 text-base-regular text-light-4 outline-none !important;
+    @apply border-none bg-custom-backgrounds-secondary text-base-regular text-primary placeholder:text-secondary outline-none !important;
   }
 
   .topbar {

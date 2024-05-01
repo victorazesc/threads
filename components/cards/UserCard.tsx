@@ -22,21 +22,21 @@ function UserCard({ id, name, username, imgUrl, personType }: Props) {
   return (
     <article className='user-card'>
       <div className='user-card_avatar'>
-        <div className='relative h-12 w-12'>
-          <Avatar
-            name={name.length > 0 ? name : "Threads"}
-            src={imgUrl}
-            size={48}
-            showTooltip={false}
-            shape="circle"
-            fallbackBackgroundColor="bg-custom-backgrounds-secondary"
-            className={`capitalize`}
-          />
-        </div>
+
+        <Avatar
+          name={name.length > 0 ? name : "Threads"}
+          src={imgUrl}
+          size={36}
+          showTooltip={false}
+          shape="circle"
+          fallbackBackgroundColor="bg-custom-backgrounds-secondary"
+          className={`capitalize`}
+        />
+
 
         <div className='flex-1 text-ellipsis'>
-          <h4 className='text-base-semibold text-light-1'>{name}</h4>
-          <p className='text-small-medium text-gray-1'>@{username}</p>
+          <h4 className='text-15 font-medium text-primary'>{username}</h4>
+          <p className='text-15 text-secondary'>{name}</p>
         </div>
       </div>
 
@@ -50,7 +50,7 @@ function UserCard({ id, name, username, imgUrl, personType }: Props) {
           }
         }}
       >
-        View
+        Visualizar
       </Button>
     </article>
   );
